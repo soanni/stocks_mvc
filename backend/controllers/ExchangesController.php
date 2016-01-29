@@ -32,6 +32,7 @@ class ExchangesController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'index';
         $searchModel = new ExchangeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

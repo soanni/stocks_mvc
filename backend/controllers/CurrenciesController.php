@@ -32,6 +32,7 @@ class CurrenciesController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'index';
         $searchModel = new CurrencySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

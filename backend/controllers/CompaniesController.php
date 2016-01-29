@@ -32,6 +32,7 @@ class CompaniesController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'index';
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

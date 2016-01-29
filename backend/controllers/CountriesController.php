@@ -32,6 +32,7 @@ class CountriesController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'index';
         $searchModel = new CountrySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

@@ -112,6 +112,7 @@ class Quote extends ActiveRecordTimestamp
     }
 
     //////////////////////////////////////////////
+
     /**
      * get input rate step
      */

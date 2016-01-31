@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\index\Index */
 
-$this->title = $model->indexid;
+$this->title = $model->indname;
 $this->params['breadcrumbs'][] = ['label' => 'Indices', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -36,5 +37,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'ChangeDate',
         ],
     ]) ?>
+
+    <h2>Quotes belonging to index</h2>
+    <hr>
+
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' =>$dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'fullname',
+            'acronym',
+            [
+                'attribute' => 'privileged',
+                'format' => 'boolean'
+            ]
+        ]
+    ]);?>
 
 </div>

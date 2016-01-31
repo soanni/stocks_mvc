@@ -2,9 +2,12 @@
 
 namespace backend\modules\admin\controllers;
 
+use common\models\quote\Quote;
 use Yii;
 use common\models\index\Index;
 use common\models\index\IndexSearch;
+use yii\data\SqlDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -48,9 +51,24 @@ class IndecesController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = $this->findModel($id);
+        $count = Yii::$app->db->createCommand('SELECT COUNT(*)
+                                               FROM quote q
+                                               INNER JOIN indiceslinks lnk ON lnk.quoteid = q.qid
+                                               WHERE lnk.indid = :id AND lnk.ActiveFlag = 1 AND q.ActiveFlag = 1',[':id' => $id])->queryScalar();
+        $dataProvider = new SqlDataProvider([
+            'sql' => 'SELECT q.fullname, q.acronym, q.privileged
+                      FROM quote q
+                      INNER JOIN indiceslinks lnk ON lnk.quoteid = q.qid
+                      WHERE lnk.indid = :id AND lnk.ActiveFlag = 1 AND q.ActiveFlag = 1',
+            'params' => [':id' => $id],
+            //'pagination' => false
+            'totalCount' => $count,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
+        return $this->renderPartial('view',compact('model','dataProvider'));
     }
 
     /**
@@ -65,7 +83,7 @@ class IndecesController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->indexid]);
         } else {
-            return $this->render('create', [
+            return $this->renderPartial('create', [
                 'model' => $model,
             ]);
         }

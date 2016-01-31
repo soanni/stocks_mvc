@@ -27,4 +27,20 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('.actionModal').click(function (event) {
+        event.preventDefault();
+        var modalContainer = $('#modal');
+        var url = $(this).attr("href");
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {},
+            success: function (data) {
+                $('#modal-body').html(data);
+                modalContainer.modal({show: true});
+            }
+        });
+    });
+
 });

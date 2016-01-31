@@ -1,18 +1,18 @@
 <?php
 
-namespace backend\controllers;
+namespace backend\modules\admin\controllers;
 
 use Yii;
-use common\models\exchange\Exchange;
-use common\models\exchange\ExchangeSearch;
+use common\models\currency\Currency;
+use common\models\currency\CurrencySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ExchangesController implements the CRUD actions for Exchange model.
+ * CurrenciesController implements the CRUD actions for Currency model.
  */
-class ExchangesController extends Controller
+class CurrenciesController extends Controller
 {
     public function behaviors()
     {
@@ -27,15 +27,13 @@ class ExchangesController extends Controller
     }
 
     /**
-     * Lists all Exchange models.
+     * Lists all Currency models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $this->layout = 'index';
-        $searchModel = new ExchangeSearch();
+        $searchModel = new CurrencySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -43,7 +41,7 @@ class ExchangesController extends Controller
     }
 
     /**
-     * Displays a single Exchange model.
+     * Displays a single Currency model.
      * @param integer $id
      * @return mixed
      */
@@ -55,16 +53,16 @@ class ExchangesController extends Controller
     }
 
     /**
-     * Creates a new Exchange model.
+     * Creates a new Currency model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Exchange();
+        $model = new Currency();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->exchid]);
+            return $this->redirect(['view', 'id' => $model->curid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,7 +71,7 @@ class ExchangesController extends Controller
     }
 
     /**
-     * Updates an existing Exchange model.
+     * Updates an existing Currency model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,7 +81,7 @@ class ExchangesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->exchid]);
+            return $this->redirect(['view', 'id' => $model->curid]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,7 +90,7 @@ class ExchangesController extends Controller
     }
 
     /**
-     * Deletes an existing Exchange model.
+     * Deletes an existing Currency model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -105,15 +103,15 @@ class ExchangesController extends Controller
     }
 
     /**
-     * Finds the Exchange model based on its primary key value.
+     * Finds the Currency model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Exchange the loaded model
+     * @return Currency the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Exchange::findOne($id)) !== null) {
+        if (($model = Currency::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

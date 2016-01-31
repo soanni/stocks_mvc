@@ -1,18 +1,18 @@
 <?php
 
-namespace backend\controllers;
+namespace backend\modules\admin\controllers;
 
 use Yii;
-use common\models\rate\Rate;
-use common\models\rate\RateSearch;
+use common\models\index\Index;
+use common\models\index\IndexSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * RatesController implements the CRUD actions for Rate model.
+ * IndecesController implements the CRUD actions for Index model.
  */
-class RatesController extends Controller
+class IndecesController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +27,12 @@ class RatesController extends Controller
     }
 
     /**
-     * Lists all Rate models.
+     * Lists all Index models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $this->layout = 'index';
-        $searchModel = new RateSearch();
+        $searchModel = new IndexSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,7 +42,7 @@ class RatesController extends Controller
     }
 
     /**
-     * Displays a single Rate model.
+     * Displays a single Index model.
      * @param integer $id
      * @return mixed
      */
@@ -55,16 +54,16 @@ class RatesController extends Controller
     }
 
     /**
-     * Creates a new Rate model.
+     * Creates a new Index model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Rate();
+        $model = new Index();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->rateid]);
+            return $this->redirect(['view', 'id' => $model->indexid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,7 +72,7 @@ class RatesController extends Controller
     }
 
     /**
-     * Updates an existing Rate model.
+     * Updates an existing Index model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,7 +82,7 @@ class RatesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->rateid]);
+            return $this->redirect(['view', 'id' => $model->indexid]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,7 +91,7 @@ class RatesController extends Controller
     }
 
     /**
-     * Deletes an existing Rate model.
+     * Deletes an existing Index model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -105,15 +104,15 @@ class RatesController extends Controller
     }
 
     /**
-     * Finds the Rate model based on its primary key value.
+     * Finds the Index model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Rate the loaded model
+     * @return Index the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Rate::findOne($id)) !== null) {
+        if (($model = Index::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

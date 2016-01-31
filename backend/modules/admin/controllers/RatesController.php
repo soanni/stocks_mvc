@@ -1,18 +1,18 @@
 <?php
 
-namespace backend\controllers;
+namespace backend\modules\admin\controllers;
 
 use Yii;
-use common\models\currency\Currency;
-use common\models\currency\CurrencySearch;
+use common\models\rate\Rate;
+use common\models\rate\RateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CurrenciesController implements the CRUD actions for Currency model.
+ * RatesController implements the CRUD actions for Rate model.
  */
-class CurrenciesController extends Controller
+class RatesController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +27,12 @@ class CurrenciesController extends Controller
     }
 
     /**
-     * Lists all Currency models.
+     * Lists all Rate models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $this->layout = 'index';
-        $searchModel = new CurrencySearch();
+        $searchModel = new RateSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,7 +42,7 @@ class CurrenciesController extends Controller
     }
 
     /**
-     * Displays a single Currency model.
+     * Displays a single Rate model.
      * @param integer $id
      * @return mixed
      */
@@ -55,16 +54,16 @@ class CurrenciesController extends Controller
     }
 
     /**
-     * Creates a new Currency model.
+     * Creates a new Rate model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Currency();
+        $model = new Rate();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->curid]);
+            return $this->redirect(['view', 'id' => $model->rateid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,7 +72,7 @@ class CurrenciesController extends Controller
     }
 
     /**
-     * Updates an existing Currency model.
+     * Updates an existing Rate model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,7 +82,7 @@ class CurrenciesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->curid]);
+            return $this->redirect(['view', 'id' => $model->rateid]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,7 +91,7 @@ class CurrenciesController extends Controller
     }
 
     /**
-     * Deletes an existing Currency model.
+     * Deletes an existing Rate model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -105,15 +104,15 @@ class CurrenciesController extends Controller
     }
 
     /**
-     * Finds the Currency model based on its primary key value.
+     * Finds the Rate model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Currency the loaded model
+     * @return Rate the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Currency::findOne($id)) !== null) {
+        if (($model = Rate::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

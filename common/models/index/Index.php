@@ -1,36 +1,34 @@
 <?php
 
-namespace common\models\company;
+namespace common\models\index;
 
 use common\models\ActiveRecordTimestamp;
 use Yii;
 use common\models\country\Country;
-use common\models\quote\Quote;
-use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "company".
+ * This is the model class for table "index".
  *
- * @property integer $companyid
- * @property string $companyname
- * @property string $web
+ * @property integer $indexid
  * @property integer $countryid
+ * @property string $indname
+ * @property string $isin
  * @property integer $ActiveFlag
  * @property string $ChangeDate
  *
  * @property Country $country
- * @property Quotes[] $quotes
  */
-class Company extends ActiveRecordTimestamp
+class Index extends ActiveRecordTimestamp
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'company';
+        return 'index';
     }
 
     /**
@@ -39,11 +37,10 @@ class Company extends ActiveRecordTimestamp
     public function rules()
     {
         return [
+            [['countryid', 'indname', 'isin', 'ActiveFlag', 'ChangeDate'], 'required'],
             [['countryid', 'ActiveFlag'], 'integer'],
-            [['companyname', 'countryid'], 'required'],
-            [['companyname'], 'unique'],
             [['ChangeDate'], 'safe'],
-            [['companyname', 'web'], 'string', 'max' => 255]
+            [['indname', 'isin'], 'string', 'max' => 255]
         ];
     }
 
@@ -53,10 +50,10 @@ class Company extends ActiveRecordTimestamp
     public function attributeLabels()
     {
         return [
-            'companyid' => 'Company id',
-            'companyname' => 'Company',
-            'web' => 'Web',
+            'indexid' => 'Index id',
             'countryid' => 'Country',
+            'indname' => 'Index name',
+            'isin' => 'ISIN',
             'ActiveFlag' => 'ActiveFlag',
             'ChangeDate' => 'ChangeDate',
         ];
@@ -69,14 +66,4 @@ class Company extends ActiveRecordTimestamp
     {
         return $this->hasOne(Country::className(), ['countryid' => 'countryid']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getQuotes()
-    {
-        return $this->hasMany(Quote::className(), ['companyid' => 'companyid']);
-    }
-
-
 }

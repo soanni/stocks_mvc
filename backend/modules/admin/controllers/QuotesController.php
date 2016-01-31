@@ -1,18 +1,19 @@
 <?php
 
-namespace backend\controllers;
+namespace backend\modules\admin\controllers;
 
 use Yii;
-use common\models\country\Country;
-use common\models\country\CountrySearch;
+use common\models\quote\Quote;
+use common\models\quote\QuoteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
- * CountriesController implements the CRUD actions for Country model.
+ * QuotesController implements the CRUD actions for Quote model.
  */
-class CountriesController extends Controller
+class QuotesController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +28,12 @@ class CountriesController extends Controller
     }
 
     /**
-     * Lists all Country models.
+     * Lists all Quote models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $this->layout = 'index';
-        $searchModel = new CountrySearch();
+        $searchModel = new QuoteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,7 +43,7 @@ class CountriesController extends Controller
     }
 
     /**
-     * Displays a single Country model.
+     * Displays a single Quote model.
      * @param integer $id
      * @return mixed
      */
@@ -53,18 +53,17 @@ class CountriesController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
     /**
-     * Creates a new Country model.
+     * Creates a new Quote model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Country();
+        $model = new Quote();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->countryid]);
+            return $this->redirect(['view', 'id' => $model->qid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,7 +72,7 @@ class CountriesController extends Controller
     }
 
     /**
-     * Updates an existing Country model.
+     * Updates an existing Quote model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,7 +82,7 @@ class CountriesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->countryid]);
+            return $this->redirect(['view', 'id' => $model->qid]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,7 +91,7 @@ class CountriesController extends Controller
     }
 
     /**
-     * Deletes an existing Country model.
+     * Deletes an existing Quote model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -104,16 +103,32 @@ class CountriesController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionAjaxQuoteDetails(){
+        $id = Yii::$app->request->get('quoteid',null);
+        $quote = $this->findModel($id);
+        $return = [];
+        if($quote !== null){
+            $return['companyname'] = $quote->company->companyname;
+            $return['countryname'] = $quote->company->country->countryname;
+            $return['step'] = $quote->getRateStep();
+        }
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $return;
+
+        return $response;
+    }
+
     /**
-     * Finds the Country model based on its primary key value.
+     * Finds the Quote model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Country the loaded model
+     * @return Quote the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Country::findOne($id)) !== null) {
+        if (($model = Quote::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

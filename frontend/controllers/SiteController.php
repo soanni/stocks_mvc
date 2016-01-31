@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\rate\Rate;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
@@ -72,7 +73,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+
+        // display carousel widget with last rates
+        $subquery = Rate::find()->select('ratedate as lastdate')->orderBy('ratedate DESC')->limit(1);
+        $models = Rate::find()->innerJoin(['u' => $subquery],'u.lastdate = ratedate')->all();
+
+        return $this->render('index',compact('models'));
     }
 
     /**

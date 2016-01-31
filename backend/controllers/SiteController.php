@@ -16,9 +16,9 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
-        return [
+//    public function behaviors()
+//    {
+//        return [
 //            'access' => [
 //                'class' => AccessControl::className(),
 //                'rules' => [
@@ -33,14 +33,14 @@ class SiteController extends Controller
 //                    ],
 //                ],
 //            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => [
+//                    'logout' => ['post'],
+//                ],
+//            ],
+//        ];
+//    }
 
     /**
      * @inheritdoc
@@ -56,7 +56,6 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $model = new Site();
         return $this->render('index',compact('model'));
     }
 

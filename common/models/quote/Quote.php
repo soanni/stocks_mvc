@@ -3,6 +3,8 @@
 namespace common\models\quote;
 
 use common\helpers\DatabaseHelper;
+use common\models\ActiveRecordTimestamp;
+use common\models\index\Index;
 use Yii;
 use common\models\company\Company;
 use common\models\exchange\Exchange;
@@ -29,7 +31,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Company $company
  * @property Rates[] $rates
  */
-class Quote extends \yii\db\ActiveRecord
+class Quote extends ActiveRecordTimestamp
 {
     /**
      * @inheritdoc
@@ -38,34 +40,6 @@ class Quote extends \yii\db\ActiveRecord
     {
         return 'quote';
     }
-
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['ChangeDate'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['ChangeDate'],
-                ],
-                'value' => new Expression('NOW()')
-            ],
-        ];
-    }
-
-    /**
-     * override beforeSave() to automatically set the ActiveFlag attribute
-     */
-    public function beforeSave($insert)
-    {
-        $return = parent::beforeSave($insert);
-        if($this->isNewRecord){
-            $this->ActiveFlag = 1;
-        }
-
-        return $return;
-    }
-
 
         /**
      * @inheritdoc
@@ -124,6 +98,10 @@ class Quote extends \yii\db\ActiveRecord
 //        $query = $this->hasOne(Company::className(), ['companyid' => 'companyid']);
 //        $query->
 //    }
+
+    public function getIndeces(){
+        return $this->hasMany(Index::className(),['indexid' => 'indid'])->viaTable('indiceslinks',['quoteid' => 'qid']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery

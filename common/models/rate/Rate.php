@@ -2,6 +2,7 @@
 
 namespace common\models\rate;
 
+use common\models\ActiveRecordTimestamp;
 use Yii;
 use common\models\quote\Quote;
 
@@ -25,7 +26,7 @@ use common\models\quote\Quote;
  *
  * @property Quote $quote
  */
-class Rate extends \yii\db\ActiveRecord
+class Rate extends ActiveRecordTimestamp
 {
     /**
      * @inheritdoc
@@ -78,4 +79,30 @@ class Rate extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Quote::className(), ['qid' => 'quoteid']);
     }
+
+    // get the percentage difference with the previous day
+    /**
+     * @return string
+     */
+    public function getDiffFromTheDayBefore(){
+        $val = $this->find()->select('lastdeal')
+                    ->where(['<','ratedate',$this->ratedate])
+                    ->andWhere(['quoteid' => $this->quote->qid])
+                    ->orderBy('ratedate DESC')
+                    ->limit(1)->scalar();
+        if($val){
+            return round(($this->lastdeal/$val - 1) * 100,2) . "%";
+        }else{
+            return 'No data';
+        }
+    }
+
+    // get the percentage difference with the selected date
+    /**
+     * @param $date datetime
+     * @return float
+     */
+//    public function getDiffFromTheDay($date){
+//
+//    }
 }

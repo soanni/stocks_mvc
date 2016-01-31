@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\helpers\DatabaseHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\quote\QuoteSearch */
@@ -28,8 +29,24 @@ $this->params['breadcrumbs'][] = $this->title;
             //'shortname',
             'englishname',
             'acronym',
-            'exch.exchname',
-            'company.companyname',
+            [
+                'attribute' => 'exch.exchname',
+                'filter' => Html::activeDropDownList($searchModel,'exchid',DatabaseHelper::getExchangesList(),['prompt' => 'Select exchange'])
+            ],
+            [
+                'attribute' => 'company.companyname',
+                //'filter' => Html::activeDropDownList($searchModel,'companyid',DatabaseHelper::getCompaniesList(),['prompt' => 'Select company'])
+            ],
+            [
+                'label' => 'Indeces',
+                'content' => function ($model, $key, $index, $column) {
+                    $value = '';
+                    foreach($model->indeces as $index){
+                        $value .= '[' . $index->indname .']';
+                    }
+                    return $value;
+                }
+            ],
             [
                 'attribute' => 'privileged',
                 'format' => 'boolean'

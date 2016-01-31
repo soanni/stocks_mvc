@@ -1,18 +1,18 @@
 <?php
 
-namespace backend\controllers;
+namespace backend\modules\admin\controllers;
 
 use Yii;
-use common\models\company\Company;
-use common\models\company\CompanySearch;
+use common\models\exchange\Exchange;
+use common\models\exchange\ExchangeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CompaniesController implements the CRUD actions for Company model.
+ * ExchangesController implements the CRUD actions for Exchange model.
  */
-class CompaniesController extends Controller
+class ExchangesController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +27,12 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Lists all Company models.
+     * Lists all Exchange models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $this->layout = 'index';
-        $searchModel = new CompanySearch();
+        $searchModel = new ExchangeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,7 +42,7 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Displays a single Company model.
+     * Displays a single Exchange model.
      * @param integer $id
      * @return mixed
      */
@@ -55,16 +54,16 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Creates a new Company model.
+     * Creates a new Exchange model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Company();
+        $model = new Exchange();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->companyid]);
+            return $this->redirect(['view', 'id' => $model->exchid]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -73,7 +72,7 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Updates an existing Company model.
+     * Updates an existing Exchange model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,7 +82,7 @@ class CompaniesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->companyid]);
+            return $this->redirect(['view', 'id' => $model->exchid]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -92,7 +91,7 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Deletes an existing Company model.
+     * Deletes an existing Exchange model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -105,15 +104,15 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Finds the Company model based on its primary key value.
+     * Finds the Exchange model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Company the loaded model
+     * @return Exchange the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Company::findOne($id)) !== null) {
+        if (($model = Exchange::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

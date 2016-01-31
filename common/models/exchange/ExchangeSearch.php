@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\exchange\Exchange;
+use common\helpers\DatabaseHelper;
 
 /**
  * ExchangeSearch represents the model behind the search form about `common\models\exchange\Exchange`.
@@ -19,6 +20,7 @@ class ExchangeSearch extends Exchange
     {
         return [
             [['exchid'], 'integer'],
+            ['countryid', 'in', 'range' => array_keys(DatabaseHelper::getCountriesList())],
             [['exchname', 'web'], 'safe'],
         ];
     }
@@ -57,6 +59,7 @@ class ExchangeSearch extends Exchange
 
         $query->andFilterWhere([
             'exchid' => $this->exchid,
+            'countryid' => $this->countryid,
         ]);
 
         $query->andFilterWhere(['like', 'exchname', $this->exchname])

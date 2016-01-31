@@ -18,7 +18,7 @@ class IndexSearch extends Index
     public function rules()
     {
         return [
-            [['indexid', 'countryid', 'ActiveFlag'], 'integer'],
+            [['indexid', 'exchangeid', 'ActiveFlag'], 'integer'],
             [['indname', 'isin', 'ChangeDate'], 'safe'],
         ];
     }
@@ -57,7 +57,7 @@ class IndexSearch extends Index
 
         $query->andFilterWhere([
             'indexid' => $this->indexid,
-            'countryid' => $this->countryid,
+            'exchangeid' => $this->exchangeid,
             'ActiveFlag' => $this->ActiveFlag,
             'ChangeDate' => $this->ChangeDate,
         ]);

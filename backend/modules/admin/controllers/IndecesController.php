@@ -2,15 +2,17 @@
 
 namespace backend\modules\admin\controllers;
 
-use common\models\quote\Quote;
+
 use Yii;
-use common\models\index\Index;
-use common\models\index\IndexSearch;
 use yii\data\SqlDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\quote\QuoteSearch;
+use common\models\quote\Quote;
+use common\models\index\Index;
+use common\models\index\IndexSearch;
 
 /**
  * IndecesController implements the CRUD actions for Index model.
@@ -27,6 +29,15 @@ class IndecesController extends Controller
                 ],
             ],
         ];
+    }
+
+    // the list of quotes for selected exchange to appear in modal window
+    public function actionAddQuotesToIndex(){
+        $searchModel = new QuoteSearch();
+        $params = array('QuoteSearch'=>array('exchid' => Yii::$app->request->get('exchid')));
+        $dataProvider = $searchModel->search($params);
+        $dataProvider->pagination->pageSize = 5;
+        return $this->renderPartial('addQuotesToIndex',compact('searchModel','dataProvider'));
     }
 
     /**
@@ -65,7 +76,7 @@ class IndecesController extends Controller
             //'pagination' => false
             'totalCount' => $count,
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => 5,
             ],
         ]);
         return $this->renderPartial('view',compact('model','dataProvider'));
@@ -81,9 +92,9 @@ class IndecesController extends Controller
         $model = new Index();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->indexid]);
+            return $this->redirect(['index']);
         } else {
-            return $this->renderPartial('create', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
@@ -100,7 +111,7 @@ class IndecesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->indexid]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,

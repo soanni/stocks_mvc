@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Index', ['create'], ['class' => 'btn btn-success actionModal']) ?>
+        <?= Html::a('Create Index', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,21 +25,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            'exchange.country.countryname',
+
             [
-                'attribute' => 'country.countryname',
-                'filter' => Html::activeDropDownList($searchModel,'countryid',DatabaseHelper::getCountriesList(),['prompt' => 'Select country'])
+                'attribute' => 'exchange.exchname',
+                'filter' => Html::activeDropDownList($searchModel,'exchangeid',DatabaseHelper::getExchangesList(),['prompt' => 'Select exchange'])
             ],
             'indname',
             'isin',
             'ActiveFlag',
-            // 'ChangeDate',
             [
                 'class' => \yii\grid\ActionColumn::className(),
                 'header' => 'Actions',
                 'buttons' => [
                     'view' => function($url, $model, $key){
-//                        $view_url = Yii::$app->getUrlManager()->createUrl(['book/view','id'=>$key]);
-//                        return Html::a('View',$view_url,['class'=>'showModalButton','aria-label' => Yii::t('yii', 'See'),]);
                         $options =[
                             'title' => Yii::t('yii', 'View'),
                             'aria-label' => Yii::t('yii', 'View'),
@@ -50,7 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ]
             ],
-            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

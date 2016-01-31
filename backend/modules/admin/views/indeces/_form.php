@@ -13,7 +13,7 @@ use common\helpers\DatabaseHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'countryid')->dropDownList(DatabaseHelper::getCountriesList(),['prompt', 'Select country']); ?>
+    <?= $form->field($model, 'exchangeid')->dropDownList(DatabaseHelper::getExchangesList(),['prompt' => 'Select exchange']); ?>
 
     <?= $form->field($model, 'indname')->textInput(['maxlength' => true]) ?>
 
@@ -21,7 +21,10 @@ use common\helpers\DatabaseHelper;
 
     <h2>Add quotes to index</h2>
     <hr/>
-    <?= Html::button('Add quote',['onclick' => 'addRow("index-quotes")']);?>
+    <?=
+        //Html::button('Add quote',['onclick' => 'addRow("index-quotes")']);
+        Html::button('Add quote',['id' => 'add-quote-index']);
+    ?>
     <?= Html::button('Remove quote',['class' => 'delete-quote invisible','onclick' => 'deleteRow("index-quotes")']);?>
     <?= Html::beginTag('table',['id' => 'index-quotes','class' => ['table' ,'table-striped','table-bordered']]);?>
         <?= Html::beginTag('thead');?>
@@ -39,3 +42,13 @@ use common\helpers\DatabaseHelper;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+    \yii\bootstrap\Modal::begin([
+        'headerOptions' => ['id' => 'modal-header'],
+        'id' => 'modal',
+        'options' => ['class' => 'slide'],
+        'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
+    ]);
+    echo "<div id='modal-body'></div>";
+    \yii\bootstrap\Modal::end();
+?>

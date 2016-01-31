@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('select[name="Rate[quoteid]"]').change(function(){
         var obj = {quoteid: $(this).val()};
-        $.get('http://admin.stocks_mvc.ubuntu/quotes/ajax-quote-details',obj,function(data){
+        $.get('/admin/quotes/ajax-quote-details',obj,function(data){
             var result = data;
             if(result){
                 var step = 1;
@@ -30,17 +30,32 @@ $(document).ready(function(){
 
     $('.actionModal').click(function (event) {
         event.preventDefault();
-        var modalContainer = $('#modal');
         var url = $(this).attr("href");
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: {},
-            success: function (data) {
-                $('#modal-body').html(data);
-                modalContainer.modal({show: true});
-            }
-        });
+        var obj = {};
+        ajaxRenderOnSuccess(url,obj);
+    });
+
+    $(document).on('click','ul.pagination li a',function (event){
+        event.preventDefault();
+        var url = $(this).attr("href");
+        var obj = {};
+        ajaxRenderOnSuccess(url,obj);
+    });
+
+    $('#add-quote-index').click(function (event) {
+        event.preventDefault();
+        var url = '/admin/indeces/add-quotes-to-index';
+        var exchid = $('select[name="Index[exchangeid]"]').val();
+        var obj = {exchid: exchid};
+        ajaxRenderOnSuccess(url,obj);
     });
 
 });
+
+function ajaxRenderOnSuccess(url,obj){
+    var modalContainer = $('#modal');
+    $.get(url,obj,function (data) {
+        $('#modal-body').html(data);
+        modalContainer.modal({show: true});
+    });
+}

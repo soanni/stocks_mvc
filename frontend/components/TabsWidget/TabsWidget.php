@@ -20,7 +20,7 @@ class TabsWidget extends Widget
         foreach($this->models as $model){
             if(!empty($model->quote->indeces)){
                 foreach($model->quote->indeces as $index){
-                    $name = $index->country->countryname;
+                    $name = $index->exchange->country->countryname;
                     if(!array_key_exists($name,$countries)){
                         $countries[$name] = array();
                         $countries[$name][] = $index->indname;

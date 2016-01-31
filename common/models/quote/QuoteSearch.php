@@ -2,10 +2,10 @@
 
 namespace common\models\quote;
 
+use common\models\quote\Quote;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\quote\Quote;
 
 /**
  * QuoteSearch represents the model behind the search form about `common\models\quote\Quote`.

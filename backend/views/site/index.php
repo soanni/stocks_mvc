@@ -13,8 +13,8 @@ $this->title = 'Admin panel';
     <div class="body-content">
         <div class="row">
             <div class="generator col-lg-4">
-                <h3>Exchanges, countries, currencies, quotes, rates, etc. management</h3>
-                <p>The following section provides management facilities (CRUD) for basic application structures</p>
+                <h3>Application structures management</h3>
+                <p>The following section provides management facilities for essential application structures</p>
                 <p><?= HTML::a('Start','/admin');?></p>
             </div>
              <div class="generator col-lg-4">

@@ -2,18 +2,20 @@
 
 namespace common\models\index;
 
+use common\helpers\DatabaseHelper;
 use common\models\ActiveRecordTimestamp;
 use Yii;
 use common\models\country\Country;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use common\models\exchange\Exchange;
 
 /**
  * This is the model class for table "index".
  *
  * @property integer $indexid
- * @property integer $countryid
+ * @property integer $exchangeid
  * @property string $indname
  * @property string $isin
  * @property integer $ActiveFlag
@@ -37,9 +39,10 @@ class Index extends ActiveRecordTimestamp
     public function rules()
     {
         return [
-            [['countryid', 'indname', 'isin', 'ActiveFlag', 'ChangeDate'], 'required'],
-            [['countryid', 'ActiveFlag'], 'integer'],
-            [['ChangeDate'], 'safe'],
+            [['exchangeid', 'indname', 'isin',], 'required'],
+            ['exchangeid', 'in', 'range' => array_keys(DatabaseHelper::getExchangesList())],
+            [['ActiveFlag'], 'integer'],
+            [['ChangeDate','ActiveFlag'], 'safe'],
             [['indname', 'isin'], 'string', 'max' => 255]
         ];
     }
@@ -51,7 +54,7 @@ class Index extends ActiveRecordTimestamp
     {
         return [
             'indexid' => 'Index id',
-            'countryid' => 'Country',
+            'exchangeid' => 'Exchange',
             'indname' => 'Index name',
             'isin' => 'ISIN',
             'ActiveFlag' => 'ActiveFlag',
@@ -59,11 +62,13 @@ class Index extends ActiveRecordTimestamp
         ];
     }
 
+    ////////////////////// relations
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCountry()
-    {
-        return $this->hasOne(Country::className(), ['countryid' => 'countryid']);
+
+    public function getExchange(){
+        return $this->hasOne(Exchange::className(), ['exchid' => 'exchangeid']);
     }
 }

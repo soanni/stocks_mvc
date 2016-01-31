@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\helpers\DatabaseHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\exchange\ExchangeSearch */
@@ -25,6 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'exchname',
+            [
+                'attribute' => 'country.countryname',
+                'filter' => Html::activeDropDownList($searchModel,'countryid',DatabaseHelper::getCountriesList(),['prompt' => 'Select country'])
+            ],
             [
                 'attribute' => 'web',
                 'format' => 'url'

@@ -3,11 +3,15 @@
 namespace common\models\exchange;
 
 use Yii;
+use common\helpers\DatabaseHelper;
+use common\models\quote\Quote;
+use common\models\country\Country;
 
 /**
  * This is the model class for table "exchange".
  *
  * @property integer $exchid
+ * @property integer $countryid
  * @property string $exchname
  * @property string $web
  *
@@ -29,9 +33,10 @@ class Exchange extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['exchname','web'], 'required'],
+            [['exchname','web','countryid'], 'required'],
             [['exchname'], 'unique'],
-            [['exchname', 'web'], 'string', 'max' => 255]
+            [['exchname', 'web'], 'string', 'max' => 255],
+            ['countryid', 'in', 'range' => array_keys(DatabaseHelper::getCountriesList())]
         ];
     }
 
@@ -47,11 +52,20 @@ class Exchange extends \yii\db\ActiveRecord
         ];
     }
 
+    // relations
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getQuotes()
     {
-        return $this->hasMany(Quotes::className(), ['exchid' => 'exchid']);
+        return $this->hasMany(Quote::className(), ['exchid' => 'exchid']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCountry(){
+        return $this->hasOne(Country::className(),['countryid' => 'countryid']);
     }
 }

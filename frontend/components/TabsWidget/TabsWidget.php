@@ -3,6 +3,8 @@
 namespace frontend\components\TabsWidget;
 
 use yii\base\Widget;
+use yii\helpers\Html;
+use yii;
 
 class TabsWidget extends Widget
 {
@@ -45,18 +47,16 @@ class TabsWidget extends Widget
             $content = '';
             foreach($value as $item){
                 if(!empty($indeces_content[$item])){
-                    $content = '<table>';
+                    $content .= Html::beginTag('table',['class' => ['table','table-condensed','table-striped','table-responsive']]);
                     foreach($indeces_content[$item] as $rate){
                         $shortname = $rate->quote->shortname;
+                        $qid = $rate->quote->qid;
                         $diff = $rate->getDiffFromTheDayBefore();
-                        $content .= "<tr>
-                        <td>$rate->ratedate</td>
-                        <td>$shortname</td>
-                        <td>$rate->lastdeal</td>
-                        <td>$diff</td>
-                        </tr>";
+                        $lastdeal = Yii::$app->formatter->asDecimal($rate->lastdeal,2);
+                        //$lastdeal = rtrim($rate->lastdeal,'\0');
+                        $content .= $this->makeRow($qid,$rate->ratedate,$shortname,$lastdeal,$diff);
                     }
-                    $content .= '</table>';
+                    $content .= Html::endTag('table');
                 }
                 $items[count($items)-1]['items'][] = array('label' => $item,'content' => $content);
             }
@@ -66,5 +66,32 @@ class TabsWidget extends Widget
 
     public function run(){
         return $this->render('tabs',['items' => $this->items]);
+    }
+
+    private function makeRow($qid,$date,$name,$last,$diff){
+        $stylePositive = 'color: green';
+        $styleNegative = 'color: red';
+
+//        $row = Html::beginTag('div',['id' => 'chart']);
+            $row = Html::beginTag('tr',['id' => $qid]);
+                $row .= Html::beginTag('td');
+                $row .= Html::encode($date);
+                $row .= Html::endTag('td');
+
+                $row .= Html::beginTag('td');
+                $row .= Html::a(Html::encode($name),null,['class' => 'chart-anchor']);
+                $row .= Html::endTag('td');
+
+                $row .= Html::beginTag('td');
+                $row .= Html::encode($last);
+                $row .= Html::endTag('td');
+
+                $row .= Html::beginTag('td',['style' => ($diff > 0) ? $stylePositive: $styleNegative]);
+                $row .= Html::encode($diff);
+                $row .= Html::endTag('td');
+
+            $row .= Html::endTag('tr');
+//        $row .= Html::endTag('div');
+        return $row;
     }
 }

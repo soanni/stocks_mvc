@@ -32,6 +32,9 @@ return [
             'class' => \yii\web\UrlManager::className(),
             'enablePrettyUrl' => true,
             'showScriptName' => false
+        ],
+        'formatter' => [
+            'thousandSeparator' => ''
         ]
     ],
     'params' => $params,

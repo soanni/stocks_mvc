@@ -12,6 +12,9 @@ use common\models\rate\Rate;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
+use yii\web\Linkable;
+use yii\helpers\Url;
+Use yii\web\Link;
 
 /**
  * This is the model class for table "quote".
@@ -31,7 +34,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Company $company
  * @property Rates[] $rates
  */
-class Quote extends ActiveRecordTimestamp
+class Quote extends ActiveRecordTimestamp implements Linkable
 {
     /**
      * @inheritdoc
@@ -73,6 +76,13 @@ class Quote extends ActiveRecordTimestamp
             'privileged' => 'Privileged',
             'ActiveFlag' => 'Active Flag',
             'ChangeDate' => 'Change Date',
+        ];
+    }
+
+    public function getLinks()
+    {
+        return [
+            Link::REL_SELF => Url::to(['quotes/view', 'qid' => $this->qid], true),
         ];
     }
 

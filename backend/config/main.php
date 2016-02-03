@@ -14,6 +14,9 @@ return [
     'modules' => [
         'admin' => [
             'class' => 'backend\modules\admin\AdminModule'
+        ],
+        'api' => [
+            'class' => 'backend\modules\api\ApiModule'
         ]
     ],
     'components' => [
@@ -36,7 +39,10 @@ return [
         'urlManager' => [
             'class' => \yii\web\UrlManager::className(),
             'enablePrettyUrl' => true,
-            'showScriptName' => false
+            'showScriptName' => false,
+            'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'rate'],
+            ],
         ],
     ],
     'params' => $params,

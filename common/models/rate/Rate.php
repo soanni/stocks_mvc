@@ -72,6 +72,11 @@ class Rate extends ActiveRecordTimestamp
         ];
     }
 
+    public function extraFields()
+    {
+        return ['quote'];
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -59,6 +59,7 @@ class TabsWidget extends Widget
                     $content .= Html::endTag('table');
                 }
                 $items[count($items)-1]['items'][] = array('label' => $item,'content' => $content);
+                $content = '';
             }
         }
         $this->items = $items;

@@ -96,10 +96,67 @@ class Rate extends ActiveRecordTimestamp
                     ->orderBy('ratedate DESC')
                     ->limit(1)->scalar();
         if($val){
-            return round(($this->lastdeal/$val - 1) * 100,2) . "%";
+            return round(($this->lastdeal/$val - 1) * 100,2);
         }else{
             return 'No data';
         }
+    }
+
+    /**
+     * @param $period string: 'day','week','month'
+     */
+    public static function getDatesForLiderTab($period){
+        $startdate = null;
+        $enddate = null;
+        switch($period){
+            case 'day':
+                $startdate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1,1')->queryScalar();
+                $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();
+                break;
+            case 'month':
+                $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();;
+                $startdate = Yii::$app->db->createCommand('SELECT ratedate
+                                                          FROM rate
+                                                          WHERE ratedate >= DATE_SUB(:enddate, INTERVAL DAYOFMONTH(:enddate)-1 DAY)
+                                                          ORDER BY ratedate ASC
+                                                          LIMIT 1',[":enddate" => $enddate])->queryScalar();
+                break;
+            //case 'week':
+
+            //assume default as the 1st case
+            default:
+                $startdate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1,1')->queryScalar();
+                $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();
+        }
+        return [$startdate,$enddate];
+    }
+
+    /**
+     * @param $startdate date
+     * @param $enddate date
+     * @param bool $lider
+     * @param int $limit
+     * @return array
+     */
+    public static function getLidersBetweenSelectedDates($startdate,$enddate,$lider=true,$limit = 10){
+        $order = $lider ? 'DESC' : 'ASC';
+        $sub = static::find()->where(['ratedate' => $startdate]);
+        return static::find()->select(['rate.closerate as closeEnd'
+                                        ,'rate.ratedate as dateCloseEnd'
+                                        ,'u.closerate as closeStart'
+                                        ,'u.ratedate as dateCloseStart'
+                                        ,'quote.qid'
+                                        ,'quote.fullname'
+                                        ,'quote.acronym'
+                                        ,'quote.shortname'
+                                        ,'round((rate.lastdeal/u.lastdeal - 1)*100,2) as diff'])
+            ->innerJoin(['u' => $sub],'u.quoteid = rate.quoteid')
+            ->innerJoin('quote','quote.qid = rate.quoteid')
+            ->where(['rate.ratedate' => $enddate])
+            ->orderBy("diff $order")
+            ->limit($limit)
+            ->asArray()
+            ->all();
     }
 
     // get the percentage difference with the selected date

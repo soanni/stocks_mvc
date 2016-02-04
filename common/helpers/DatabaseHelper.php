@@ -9,7 +9,7 @@ use common\models\exchange\Exchange;
 use common\models\country\Country;
 use common\models\quote\Quote;
 
-abstract class DatabaseHelper
+class DatabaseHelper
 {
     /**
      * helpers to generate dropdown list in update/create forms

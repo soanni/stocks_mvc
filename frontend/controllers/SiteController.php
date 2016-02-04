@@ -73,12 +73,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
         // display carousel widget with last rates
         $subquery = Rate::find()->select('ratedate as lastdate')->orderBy('ratedate DESC')->limit(1);
         $models = Rate::find()->innerJoin(['u' => $subquery],'u.lastdate = ratedate')->all();
-
-        return $this->render('index',compact('models'));
+        $dates = Rate::getDatesForLiderTab('day');
+        $leaders = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1]);
+        $loosers = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1],false);
+        return $this->render('index',compact('models','leaders','loosers'));
     }
 
     /**

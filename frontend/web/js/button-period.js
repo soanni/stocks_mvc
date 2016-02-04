@@ -26,7 +26,7 @@ $(document).ready(function () {
                 a.html(item.shortname);
                 td.append(a);
                 row.append(td);
-                row.append($('<td></td>').html(item.diff));
+                row.append($('<td></td>').html(item.diff.concat('%')));
                 $('table#table-leaders > tbody').append(row);
             });
             $('table#table-loosers > tbody > tr').remove();
@@ -38,7 +38,7 @@ $(document).ready(function () {
                 a.html(item.shortname);
                 td.append(a);
                 row.append(td);
-                row.append($('<td></td>').html(item.diff));
+                row.append($('<td></td>').html(item.diff.concat('%')));
                 $('table#table-loosers > tbody').append(row);
             });
         });

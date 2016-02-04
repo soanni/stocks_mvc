@@ -4,6 +4,7 @@
          $('tr.appended').remove();
          var parentRow = $(this).parent().parent();
          var qid = parentRow.attr('id');
+         var width = $('div.col-sm-6').width();
          var obj = {quoteid: qid,
                     startdate : '20150501',
                     enddate: '20150530'};
@@ -29,6 +30,7 @@
                  .highcharts('StockChart', {
                      chart : {
                          type: 'line',
+                         width: width
                      },
                      //rangeSelector : {
                      //    allButtonsEnabled: true,

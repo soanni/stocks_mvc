@@ -103,30 +103,32 @@ class Rate extends ActiveRecordTimestamp
     }
 
     /**
-     * @param $period string: 'day','week','month'
+     * @param $period string: 'day','week','month', 'year'
      */
     public static function getDatesForLiderTab($period){
         $startdate = null;
-        $enddate = null;
+        $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();
         switch($period){
             case 'day':
                 $startdate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1,1')->queryScalar();
-                $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();
                 break;
             case 'month':
-                $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();;
                 $startdate = Yii::$app->db->createCommand('SELECT ratedate
                                                           FROM rate
                                                           WHERE ratedate >= DATE_SUB(:enddate, INTERVAL DAYOFMONTH(:enddate)-1 DAY)
                                                           ORDER BY ratedate ASC
                                                           LIMIT 1',[":enddate" => $enddate])->queryScalar();
                 break;
-            //case 'week':
-
+            case 'year':
+                $startdate = Yii::$app->db->createCommand('SELECT ratedate
+                                                          FROM rate
+                                                          WHERE ratedate >= DATE_SUB(:enddate, INTERVAL DAYOFYEAR(:enddate)-1 DAY)
+                                                          ORDER BY ratedate ASC
+                                                          LIMIT 1',[":enddate" => $enddate])->queryScalar();
+                break;
             //assume default as the 1st case
             default:
                 $startdate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1,1')->queryScalar();
-                $enddate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate DESC LIMIT 1')->queryScalar();
         }
         return [$startdate,$enddate];
     }

@@ -13,6 +13,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\Response;
 
 /**
  * Site controller
@@ -80,6 +81,25 @@ class SiteController extends Controller
         $leaders = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1]);
         $loosers = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1],false);
         return $this->render('index',compact('models','leaders','loosers'));
+    }
+
+    public function actionGetLeadersAndLoosers($period){
+        if($period == 'day'){
+            $dates = Rate::getDatesForLiderTab('day');
+        }elseif($period == 'month'){
+            $dates = Rate::getDatesForLiderTab('month');
+        }elseif($period == 'year'){
+            $dates = Rate::getDatesForLiderTab('year');
+        }
+        $leaders = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1]);
+        $loosers = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1],false);
+        $return = array($leaders,$loosers);
+
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $return;
+
+        return $response;
     }
 
     /**

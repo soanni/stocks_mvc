@@ -6,6 +6,7 @@ use yii\bootstrap\Nav;
 use yii\helpers\Html;
 
 $this->title = 'Stocks app';
+$this->registerJsFile(Yii::getAlias('@web/js/button-period.js'), ['depends' => ['yii\web\YiiAsset', 'yii\bootstrap\BootstrapAsset'],]);
 ?>
 <div class="row">
     <div class="col-md-3">
@@ -33,13 +34,13 @@ $this->title = 'Stocks app';
                 <h3>Leaders and outsiders</h3>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button type='button' class="btn btn-default btn-xs active">Day</button>
-                        <button type='button' class="btn btn-default btn-xs">Month</button>
-                        <button type='button' class="btn btn-default btn-xs">Year</button>
+                        <button id='button-day' type='button' class="btn btn-default btn-xs active">Day</button>
+                        <button id='button-month' type='button' class="btn btn-default btn-xs">Month</button>
+                        <button id='button-year' type='button' class="btn btn-default btn-xs">Year</button>
                         <p></p>
                     </div>
-                    <div class="col-sm-6">
-                        <table class = 'table table-condensed table-striped table-responsive'>
+                    <div id = 'div-leaders' class="col-sm-6">
+                        <table id = 'table-leaders' class = 'table table-condensed table-striped table-responsive'>
                             <?php foreach($leaders as $leader): ?>
                             <?php $url = 'charts/view?id=' . $leader['qid'];?>
                             <tr>
@@ -49,8 +50,8 @@ $this->title = 'Stocks app';
                             <?php endforeach;?>
                         </table>
                     </div>
-                    <div class="col-sm-6">
-                        <table class = 'table table-condensed table-striped table-responsive'>
+                    <div id = 'div-loosers' class="col-sm-6">
+                        <table id = 'table-loosers' class = 'table table-condensed table-striped table-responsive'>
                             <?php foreach($loosers as $looser): ?>
                                 <?php $url = 'charts/view?id=' . $looser['qid'];?>
                                 <tr>

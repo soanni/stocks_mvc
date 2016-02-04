@@ -2,6 +2,7 @@
 
 namespace frontend\components\CarouselWidget;
 
+use Yii;
 use yii\base\Widget;
 
 class CarouselWidget extends Widget
@@ -16,7 +17,8 @@ class CarouselWidget extends Widget
         $this->carouselItemsContent = [];
         foreach($this->models as $model){
             $caption = sprintf('<h1>Rate #%d</h1>',$model->rateid);
-            $content = sprintf('%s %0.2f RUB %s',$model->quote->shortname,$model->closerate,$model->getDiffFromTheDayBefore());
+            $diff = $model->getDiffFromTheDayBefore();
+            $content = sprintf('%s %s RUB %s',$model->quote->shortname,Yii::$app->formatter->asDecimal($model->lastdeal),($diff < 0) ? '-'.$diff.'%' : '+'.$diff.'%');
             $itemContent = ['content' => $content, 'caption' => $caption];
             $this->carouselItemsContent[] = $itemContent;
         }

@@ -51,8 +51,8 @@ class TabsWidget extends Widget
                     foreach($indeces_content[$item] as $rate){
                         $shortname = $rate->quote->shortname;
                         $qid = $rate->quote->qid;
-                        $diff = $rate->getDiffFromTheDayBefore();
-                        $lastdeal = Yii::$app->formatter->asDecimal($rate->lastdeal,2);
+                        $diff = $rate->getDiffFromTheDayBefore() . '%';
+                        $lastdeal = Yii::$app->formatter->asDecimal($rate->lastdeal);
                         //$lastdeal = rtrim($rate->lastdeal,'\0');
                         $content .= $this->makeRow($qid,$rate->ratedate,$shortname,$lastdeal,$diff);
                     }

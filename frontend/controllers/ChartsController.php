@@ -24,7 +24,7 @@ class ChartsController extends Controller
     public function actionGetRatesJson($quoteid, $startdate, $enddate){
         $response = Yii::$app->response;
         $response->format = Response::FORMAT_JSON;
-        $response->data = $this->getRatesForPeriod($quoteid, $startdate, $enddate);;
+        $response->data = $this->getRatesForPeriod($quoteid, $startdate, $enddate);
 
         return $response;
     }

@@ -12,18 +12,23 @@ $this->title = 'Admin panel';
     </div>
     <div class="body-content">
         <div class="row">
-            <div class="generator col-lg-4">
+            <div class="generator col-lg-3">
                 <h3>Application structures management</h3>
                 <p>The following section provides management facilities for essential application structures</p>
                 <p><?= HTML::a('Start','/admin');?></p>
             </div>
-             <div class="generator col-lg-4">
+             <div class="generator col-lg-3">
                 <h3>User management</h3>
                 <p>User management section. Assigned roles, permissions</p>
                 <p><?= HTML::a('Start','');?></p>
             </div>
-            <div class="generator col-lg-4">
+            <div class="generator col-lg-3">
                 <h3>Orders management</h3>
+                <p>Orders management section</p>
+                <p><?= HTML::a('Start','');?></p>
+            </div>
+            <div class="generator col-lg-3">
+                <h3>Upload rates</h3>
                 <p>Orders management section</p>
                 <p><?= HTML::a('Start','');?></p>
             </div>

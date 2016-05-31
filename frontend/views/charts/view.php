@@ -44,7 +44,7 @@ $this->registerJsFile(Yii::getAlias('@web/js/candlestick.js'), ['depends' => ['y
             </ul>
             <ul class="list-inline">
                 <li>Minimum:&nbsp<span><?= Yii::$app->formatter->asDecimal($rate->minimum);?></span></li>
-                <li>Close rate:&nbsp<span><?= Yii::$app->formatter->asDecimal($rate->closerate);?></span></li>inimum
+                <li>Close rate:&nbsp<span><?= Yii::$app->formatter->asDecimal($rate->closerate);?></span></li>
                 <li>Volume:&nbsp<span><?= Yii::$app->formatter->asInteger($rate->dayvol);?></span></li>
                 <li>Last deal:&nbsp<span><?= Yii::$app->formatter->asDecimal($rate->lastdeal);?></span></li>
             </ul>

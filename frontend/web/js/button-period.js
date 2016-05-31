@@ -9,6 +9,7 @@ $(document).ready(function () {
             case 'button-day': period = 'day'; break;
             case 'button-month': period = 'month'; break;
             case 'button-year': period = 'year'; break;
+            case 'button-all': period = 'all'; break;
             default: period = 'day';
         }
         var obj = {period: period};
@@ -29,18 +30,18 @@ $(document).ready(function () {
                 row.append($('<td></td>').html(item.diff.concat('%')));
                 $('table#table-leaders > tbody').append(row);
             });
-            $('table#table-loosers > tbody > tr').remove();
-            d[1].forEach(function(item){
-                var row = $('<tr></tr>');
-                var a = $('<a></a>');
-                var td = $('<td></td>');
-                a.attr('href','/charts/view?id='.concat(item.qid));
-                a.html(item.shortname);
-                td.append(a);
-                row.append(td);
-                row.append($('<td></td>').html(item.diff.concat('%')));
-                $('table#table-loosers > tbody').append(row);
-            });
+        $('table#table-loosers > tbody > tr').remove();
+        d[1].forEach(function(item){
+            var row = $('<tr></tr>');
+            var a = $('<a></a>');
+            var td = $('<td></td>');
+            a.attr('href','/charts/view?id='.concat(item.qid));
+            a.html(item.shortname);
+            td.append(a);
+            row.append(td);
+            row.append($('<td></td>').html(item.diff.concat('%')));
+            $('table#table-loosers > tbody').append(row);
+        });
         });
     });
 });

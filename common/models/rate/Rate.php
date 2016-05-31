@@ -103,7 +103,7 @@ class Rate extends ActiveRecordTimestamp
     }
 
     /**
-     * @param $period string: 'day','week','month', 'year'
+     * @param $period string: 'day','month', 'year', 'all'
      */
     public static function getDatesForLiderTab($period){
         $startdate = null;
@@ -125,6 +125,9 @@ class Rate extends ActiveRecordTimestamp
                                                           WHERE ratedate >= DATE_SUB(:enddate, INTERVAL DAYOFYEAR(:enddate)-1 DAY)
                                                           ORDER BY ratedate ASC
                                                           LIMIT 1',[":enddate" => $enddate])->queryScalar();
+                break;
+            case 'all':
+                $startdate = Yii::$app->db->createCommand('SELECT DISTINCT ratedate FROM rate ORDER BY ratedate ASC LIMIT 1')->queryScalar();
                 break;
             //assume default as the 1st case
             default:

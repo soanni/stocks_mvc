@@ -37,6 +37,7 @@ $this->registerJsFile(Yii::getAlias('@web/js/button-period.js'), ['depends' => [
                         <button id='button-day' type='button' class="btn btn-default btn-xs active">Day</button>
                         <button id='button-month' type='button' class="btn btn-default btn-xs">Month</button>
                         <button id='button-year' type='button' class="btn btn-default btn-xs">Year</button>
+                        <button id='button-all' type='button' class="btn btn-default btn-xs">All</button>
                         <p></p>
                     </div>
                     <div id = 'div-leaders' class="col-sm-6">

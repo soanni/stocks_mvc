@@ -1,9 +1,9 @@
 $(document).ready(function () {
     var qid = $('div.chart-view').attr('id');
     var width = $('div.row').width();
-    var obj = {quoteid: qid,
-        startdate : '20150101',
-        enddate: '20150530'};
+    var obj = {
+                    quoteid: qid
+              };
     $.ajax({
         url: '/charts/get-rates-json',
         data: obj,

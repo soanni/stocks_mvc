@@ -10,6 +10,7 @@ use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\exchange\Exchange;
+use common\models\quote\Quote;
 
 /**
  * This is the model class for table "index".
@@ -41,9 +42,9 @@ class Index extends ActiveRecordTimestamp
         return [
             [['exchangeid', 'indname', 'isin',], 'required'],
             ['exchangeid', 'in', 'range' => array_keys(DatabaseHelper::getExchangesList())],
-            [['ActiveFlag'], 'integer'],
-            [['ChangeDate','ActiveFlag'], 'safe'],
-            [['indname', 'isin'], 'string', 'max' => 255]
+            [['indname', 'isin'], 'string', 'max' => 255],
+            [['indname','isin'],'trim'],
+            ['indname','unique']
         ];
     }
 
@@ -70,5 +71,13 @@ class Index extends ActiveRecordTimestamp
 
     public function getExchange(){
         return $this->hasOne(Exchange::className(), ['exchid' => 'exchangeid']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+
+    public function getQuotes(){
+        return $this->hasMany(Quote::className(),['qid' => 'quoteid'])->viaTable('indiceslinks',['indid' => 'indexid']);
     }
 }

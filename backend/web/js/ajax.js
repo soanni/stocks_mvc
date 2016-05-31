@@ -49,7 +49,33 @@ $(document).ready(function(){
         var obj = {exchid: exchid};
         ajaxRenderOnSuccess(url,obj);
     });
+    $(document).on('click','#grid-add-quote-to-index > table > tbody > tr',function(){
+        var id = $(this).attr('data-key');
+        var tr = $('<tr>').addClass('quote-row');
+        var exists = $('input[value='+id+']').length;
+        if(!exists){
+            $('#form-index-create > table > tbody').append(tr);
+            $('<td>').addClass('hidden').append($('<input name="IndexQuotes[]" type=hidden>').val(id)).appendTo(tr);
+            $('<td>').html($(this).children('td').eq(1).html()).appendTo(tr);
+            $('<td>').html($(this).children('td').eq(2).html()).appendTo(tr);
+            $('<td>').html($(this).children('td').eq(3).html()).appendTo(tr);
+            $('<td>').append($('<a href="#">').append($('<span>').addClass('glyphicon glyphicon-remove'))).appendTo(tr);
+        }
+    });
+    $(document).on('click','#form-index-create > table > tbody > tr > td > a',function(){
+        $(this).parents('tr').remove();
+    });
 
+    $('button#add-quote-index').attr('disabled',$('select[name="Index[exchangeid]"]').val() == '');
+
+    //$('#btn-load-csv').click(function(event){
+    //    event.preventDefault();
+    //    var url = '/admin/rates/load';
+    //});
+
+    $('select[name="Index[exchangeid]"]').change(function(){
+        $('button#add-quote-index').attr('disabled',$(this).val() == '');
+    });
 });
 
 function ajaxRenderOnSuccess(url,obj){
@@ -59,3 +85,4 @@ function ajaxRenderOnSuccess(url,obj){
         modalContainer.modal({show: true});
     });
 }
+

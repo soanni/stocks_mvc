@@ -5,12 +5,10 @@ namespace backend\modules\admin\controllers;
 
 use Yii;
 use yii\data\SqlDataProvider;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\quote\QuoteSearch;
-use common\models\quote\Quote;
 use common\models\index\Index;
 use common\models\index\IndexSearch;
 
@@ -84,25 +82,25 @@ class IndecesController extends Controller
 
     /**
      * Creates a new Index model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Creates links with quotes for new Index
+     * If creation is successful, the browser will be redirected to the 'index' page.
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Index();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $OK = true;
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            $OK = $OK && $this->indexCreateUpdate($model,false);
+            if($OK) return $this->redirect(['index']);
         }
+        return $this->render('create', compact('model'));
     }
 
     /**
      * Updates an existing Index model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * And index links to quotes
+     * If update is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
@@ -110,25 +108,30 @@ class IndecesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        $OK = true;
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            $OK = $OK && $this->indexCreateUpdate($model,true);
+            if($OK) return $this->redirect(['index']);
         }
+        return $this->render('update', compact('model'));
     }
 
     /**
      * Deletes an existing Index model.
+     * Deletes all links to quotes for index
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $OK = true;
+        $transaction = Yii::$app->db->beginTransaction();
+        $model = $this->findModel($id);
+        // delete records from table indiceslinks first to avoid foreign key constraint violation exception
+        $OK = $OK && Yii::$app->db->createCommand()->delete('indiceslinks',['indid' => $model->indexid])->execute();
+        $OK = $OK && $model->delete();
+        if($OK) $transaction->commit();
         return $this->redirect(['index']);
     }
 
@@ -146,5 +149,41 @@ class IndecesController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * Common function for actions create/update
+     * @param Index $model
+     * @param boolean $update
+     * @return boolean
+     */
+    private function indexCreateUpdate(&$model, $update = false){
+        $OK = true;
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            if(isset($_POST['IndexQuotes']) && !empty($_POST['IndexQuotes'])){
+                $transaction = Yii::$app->db->beginTransaction();
+                // first delete all linked quotes in table indeces links, then recreate them
+                if($update) $OK = $OK && Yii::$app->db->createCommand()->delete('indiceslinks',['indid' => $model->indexid])->execute();
+                $OK = $OK && $model->save();
+                foreach($_POST['IndexQuotes'] as $qid){
+                    $command = Yii::$app->db->createCommand()->insert('indiceslinks',[
+                        'indid' => $model->indexid
+                        ,'quoteid' => $qid
+                    ]);
+                    $OK = $OK && $command->execute();
+                }
+                if($OK){
+                    $transaction->commit();
+                    return true;
+                }else{
+                    $transaction->rollBack();
+                    $model->addError('index','Some problems during transaction occured');
+                }
+            }
+            else{
+                $model->addError('quotes','The quotes list must be at least 1 item long');
+            }
+        }
+        return false;
     }
 }

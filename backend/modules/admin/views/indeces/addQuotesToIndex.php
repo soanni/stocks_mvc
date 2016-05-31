@@ -2,11 +2,15 @@
     use yii\grid\GridView;
     use yii\helpers\Html;
     use common\helpers\DatabaseHelper;
+
+    //$this->registerCss('.table > tbody > tr:hover{ background-color : #89ae37; }');
 ?>
 
 <?= GridView::widget([
+    'id' => 'grid-add-quote-to-index',
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
+    //'rowOptions' => ['onclick' => 'indexAddToQuoteRowOnClick()'],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         'fullname',

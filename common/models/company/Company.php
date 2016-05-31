@@ -39,11 +39,11 @@ class Company extends ActiveRecordTimestamp
     public function rules()
     {
         return [
-            [['countryid', 'ActiveFlag'], 'integer'],
+            [['countryid'], 'integer'],
             [['companyname', 'countryid'], 'required'],
             [['companyname'], 'unique'],
-            [['ChangeDate'], 'safe'],
-            [['companyname', 'web'], 'string', 'max' => 255]
+            [['companyname', 'web'], 'string', 'max' => 255],
+            [['companyname', 'web'],'trim']
         ];
     }
 

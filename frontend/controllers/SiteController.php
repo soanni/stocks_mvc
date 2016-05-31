@@ -90,6 +90,8 @@ class SiteController extends Controller
             $dates = Rate::getDatesForLiderTab('month');
         }elseif($period == 'year'){
             $dates = Rate::getDatesForLiderTab('year');
+        }elseif($period == 'all'){
+            $dates = Rate::getDatesForLiderTab('all');
         }
         $leaders = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1]);
         $loosers = Rate::getLidersBetweenSelectedDates($dates[0],$dates[1],false);

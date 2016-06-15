@@ -28,9 +28,9 @@ $this->title = 'Admin panel';
                 <p><?= HTML::a('Start','');?></p>
             </div>
             <div class="generator col-lg-3">
-                <h3>Upload rates</h3>
-                <p>Orders management section</p>
-                <p><?= HTML::a('Start','');?></p>
+                <h3>Dividend calendar</h3>
+                <p>Dividend calendar</p>
+                <p><?= HTML::a('Start','/admin/dividends');?></p>
             </div>
         </div>
     </div>

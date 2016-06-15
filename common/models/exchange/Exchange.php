@@ -6,6 +6,7 @@ use Yii;
 use common\helpers\DatabaseHelper;
 use common\models\quote\Quote;
 use common\models\country\Country;
+use common\models\company\Company;
 
 /**
  * This is the model class for table "exchange".
@@ -67,5 +68,12 @@ class Exchange extends \yii\db\ActiveRecord
      */
     public function getCountry(){
         return $this->hasOne(Country::className(),['countryid' => 'countryid']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanies(){
+        return $this->hasMany(Company::className(),['companyid' => 'companyid'])->via('quotes');
     }
 }

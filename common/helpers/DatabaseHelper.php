@@ -3,6 +3,7 @@
 
 namespace common\helpers;
 
+use common\models\currency\Currency;
 use yii\helpers\ArrayHelper;
 use common\models\company\Company;
 use common\models\exchange\Exchange;
@@ -32,5 +33,9 @@ class DatabaseHelper
 
     public static function getQuotesFullnameList(){
         return ArrayHelper::map(Quote::find()->orderBy('fullname ASC')->all(),'qid','fullname');
+    }
+
+    public static function getCurrenciesList(){
+        return ArrayHelper::map(Currency::find()->all(),'curid','curname');
     }
 }

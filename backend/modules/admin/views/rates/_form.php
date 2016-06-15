@@ -6,7 +6,7 @@ use common\helpers\DatabaseHelper;
 use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\rates\Rate */
+/* @var $model common\models\rate\Rate */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

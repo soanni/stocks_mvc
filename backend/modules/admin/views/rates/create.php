@@ -1,10 +1,11 @@
 <?php
 
+
 use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\rates\Rate */
+/* @var $model common\models\rate\Rate */
 
 $this->title = 'Create Rate';
 $this->params['breadcrumbs'][] = ['label' => 'Rates', 'url' => ['index']];

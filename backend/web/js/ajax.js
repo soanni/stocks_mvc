@@ -76,6 +76,13 @@ $(document).ready(function(){
     $('select[name="Index[exchangeid]"]').change(function(){
         $('button#add-quote-index').attr('disabled',$(this).val() == '');
     });
+
+    /** Dividend form
+     * Exchange on change
+    */
+    $('select[name="Dividend[exchid]"]').change(function(){
+
+    });
 });
 
 function ajaxRenderOnSuccess(url,obj){

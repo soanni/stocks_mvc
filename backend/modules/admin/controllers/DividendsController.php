@@ -10,20 +10,29 @@ use yii;
 
 class DividendsController extends Controller
 {
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $searchModel = new DividendSearch();
         $dataProvider = $searchModel->search();
         return $this->render('index',compact('searchModel','dataProvider'));
     }
 
-    public function actionCreate(){
+    public function actionCreate()
+    {
         $model = new Dividend();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         } else {
-            return $this->render('create', compact('model'));
+            return $this->renderPartial('create', compact('model'));
         }
+    }
+
+    public function actionView($id)
+    {
+        $model = $this->findModel($id);
+        return $this->renderPartial('view', compact('model'));
+
     }
 
     /**

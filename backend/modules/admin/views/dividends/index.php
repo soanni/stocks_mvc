@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
-        <?= Html::a('Create dividend', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create dividend', ['create'], ['class' => 'btn btn-success actionModal']) ?>
     </p>
 
     <?= GridView::widget([
@@ -91,6 +91,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ]
     ]); ?>
+
+    <?php
+        \yii\bootstrap\Modal::begin([
+            'headerOptions' => ['id' => 'modal-header'],
+            'id' => 'modal',
+            'options' => ['class' => 'slide'],
+            'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
+        ]);
+        echo "<div id='modal-body'></div>";
+        \yii\bootstrap\Modal::end();
+    ?>
 
 
 </div>

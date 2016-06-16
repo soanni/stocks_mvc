@@ -32,7 +32,7 @@ Use yii\web\Link;
  *
  * @property Exchange $exch
  * @property Company $company
- * @property Rates[] $rates
+ * @property Rate[] $rates
  */
 class Quote extends ActiveRecordTimestamp implements Linkable
 {

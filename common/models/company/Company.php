@@ -57,7 +57,7 @@ class Company extends ActiveRecordTimestamp
             'companyname' => 'Company',
             'web' => 'Web',
             'countryid' => 'Country',
-            'ActiveFlag' => 'ActiveFlag',
+            'ActiveFlag' => 'Active',
             'ChangeDate' => 'ChangeDate',
         ];
     }

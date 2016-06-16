@@ -21,9 +21,23 @@ class CompaniesController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'restore' => ['post']
                 ],
             ],
         ];
+    }
+
+    /**
+     * setting flag ActiveFlag back to 1
+     * AJAX action
+     * @param $id integer
+     * @return mixed
+     * @see SoftDeleteBehavior::restore()
+     */
+    public function actionRestore($id)
+    {
+        $this->findModel($id)->restore();
+        return $this->redirect(['index']);
     }
 
     /**
@@ -118,4 +132,5 @@ class CompaniesController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

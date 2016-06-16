@@ -2,9 +2,11 @@
 
 namespace common\models;
 
+use yii\base\Event;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 // parent class for those tables that have ChangeDate and ActiveFlag columns
 
@@ -19,9 +21,20 @@ class ActiveRecordTimestamp extends ActiveRecord
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['ChangeDate'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['ChangeDate'],
+                    SoftDeleteBehavior::EVENT_AFTER_RESTORE => ['ChangeDate']
                 ],
                 'value' => new Expression('NOW()')
             ],
+            'softDelete' => [
+                'class' => SoftDeleteBehavior::className(),
+                 'softDeleteAttributeValues' => [
+                      'ActiveFlag' => 0
+                 ],
+                'restoreAttributeValues' => [
+                    'ActiveFlag' => 1
+                ],
+                'replaceRegularDelete' => true
+            ]
         ];
     }
 

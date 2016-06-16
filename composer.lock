@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cd92b69d9b52236a2b35beb4be2a693f",
-    "content-hash": "dfbda690ff128e19f07988d532b415c1",
+    "hash": "f6df75b0fa371bd5a20100630c0fac95",
+    "content-hash": "af37bd10c8bf169f10cd8546e0fc0e26",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -376,6 +376,55 @@
                 "mailer"
             ],
             "time": "2016-05-01 08:45:47"
+        },
+        {
+            "name": "yii2tech/ar-softdelete",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yii2tech/ar-softdelete.git",
+                "reference": "d9726a8ecff2059ef6dd02997dcd59bcdae41077"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yii2tech/ar-softdelete/zipball/d9726a8ecff2059ef6dd02997dcd59bcdae41077",
+                "reference": "d9726a8ecff2059ef6dd02997dcd59bcdae41077",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii2tech\\ar\\softdelete\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "Provides support for ActiveRecord soft delete in Yii2",
+            "keywords": [
+                "active",
+                "delete",
+                "record",
+                "smart",
+                "soft",
+                "yii2"
+            ],
+            "time": "2015-12-26 12:09:06"
         },
         {
             "name": "yiisoft/yii2",

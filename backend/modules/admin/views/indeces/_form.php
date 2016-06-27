@@ -6,7 +6,7 @@ use common\helpers\DatabaseHelper;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\index\Index */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form yii\bootstrap\ActiveForm */
 ?>
 
 <div class="index-form">

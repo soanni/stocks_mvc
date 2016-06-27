@@ -6,8 +6,10 @@ use Yii;
 use common\models\company\Company;
 use common\models\company\CompanySearch;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
 
 /**
  * CompaniesController implements the CRUD actions for Company model.
@@ -28,6 +30,24 @@ class CompaniesController extends Controller
     }
 
     /**
+     * @param $exchid
+     * AJAX from dividend create form
+     * TODO transform to REST
+     */
+    public function actionGetQuotesByCompany($companyid)
+    {
+        $model = new Company();
+        $model->companyid = $companyid;
+        $quotes = $model->quotes;
+
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $quotes;
+
+        return $response;
+    }
+
+    /**
      * setting flag ActiveFlag back to 1
      * AJAX action
      * @param $id integer
@@ -36,7 +56,9 @@ class CompaniesController extends Controller
      */
     public function actionRestore($id)
     {
-        $this->findModel($id)->restore();
+        $model = $this->findModel($id);
+        $model->on(SoftDeleteBehavior::EVENT_BEFORE_RESTORE,[$model,'updateChangeDateOnRestoreAndSoftDelete']);
+        $model->restore();
         return $this->redirect(['index']);
     }
 
@@ -112,7 +134,9 @@ class CompaniesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->on(SoftDeleteBehavior::EVENT_BEFORE_SOFT_DELETE,[$model,'updateChangeDateOnRestoreAndSoftDelete']);
+        $model->delete();
 
         return $this->redirect(['index']);
     }

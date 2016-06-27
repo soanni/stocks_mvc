@@ -148,3 +148,11 @@ div.required label.control-label:after {
     content: " *";
     color: red;
 }
+
+/*
+    In order for datepicker working on modal windows
+*/
+body.modal-open .hasDatepicker {
+    z-index: 10000 !important;
+}
+

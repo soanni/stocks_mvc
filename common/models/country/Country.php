@@ -3,6 +3,9 @@
 namespace common\models\country;
 
 use Yii;
+use common\models\company\Company;
+use common\models\currency\Currency;
+use common\models\exchange\Exchange;
 
 /**
  * This is the model class for table "country".
@@ -51,9 +54,17 @@ class Country extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getExchanges()
+    {
+        return $this->hasMany(Exchange::className(), ['countryid' => 'countryid']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCompanies()
     {
-        return $this->hasMany(Companies::className(), ['countryid' => 'countryid']);
+        return $this->hasMany(Company::className(), ['countryid' => 'countryid']);
     }
 
     /**
@@ -61,6 +72,18 @@ class Country extends \yii\db\ActiveRecord
      */
     public function getCurrencies()
     {
-        return $this->hasMany(Currencies::className(), ['countryid' => 'countryid']);
+        return $this->hasMany(Currency::className(), ['countryid' => 'countryid']);
+    }
+
+    // validation in dividends create form
+    // in case JS is off
+
+    /**
+     * @param $exchid
+     * @return bool
+     */
+    public function hasExchange($exchid)
+    {
+        return $this->getExchanges()->where(['exchid' => $exchid])->exists();
     }
 }

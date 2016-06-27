@@ -82,7 +82,7 @@ class Quote extends ActiveRecordTimestamp implements Linkable
     public function getLinks()
     {
         return [
-            Link::REL_SELF => Url::to(['quotes/view', 'qid' => $this->qid], true),
+            Link::REL_SELF => Url::to(['/admin/quote/view', 'id' => $this->qid], true),
         ];
     }
 

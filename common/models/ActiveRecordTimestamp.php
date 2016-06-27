@@ -3,6 +3,7 @@
 namespace common\models;
 
 use yii\base\Event;
+use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -21,7 +22,7 @@ class ActiveRecordTimestamp extends ActiveRecord
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['ChangeDate'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['ChangeDate'],
-                    SoftDeleteBehavior::EVENT_AFTER_RESTORE => ['ChangeDate']
+                    ActiveRecord::EVENT_BEFORE_DELETE => ['ChangeDate'],
                 ],
                 'value' => new Expression('NOW()')
             ],
@@ -34,20 +35,24 @@ class ActiveRecordTimestamp extends ActiveRecord
                     'ActiveFlag' => 1
                 ],
                 'replaceRegularDelete' => true
+            ],
+            'attribute' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['ActiveFlag']
+                ],
+                'value' => function($event){ return 1;}
             ]
         ];
     }
 
     /**
-     * override beforeSave() to automatically set the ActiveFlag attribute
+     * Event handler for events SoftDeleteBehavior::EVENT_BEFORE_SOFT_DELETE, SoftDeleteBehavior::EVENT_BEFORE_RESTORE
+     * Event handlers are attached in corresponding controller actions
+     * @param Event $event
      */
-    public function beforeSave($insert)
+    protected function updateChangeDateOnRestoreAndSoftDelete(Event $event)
     {
-        $return = parent::beforeSave($insert);
-        if($this->isNewRecord){
-            $this->ActiveFlag = 1;
-        }
-
-        return $return;
+        $event->sender->owner->updateAttributes(['ChangeDate' => new Expression('NOW()')]);
     }
 }

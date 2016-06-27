@@ -2,6 +2,8 @@
 
 namespace backend\modules\admin\controllers;
 
+use yii\widgets\ActiveForm;
+use yii\web\Response;
 use common\models\dividend\Dividend;
 use common\models\dividend\DividendSearch;
 use yii\web\Controller;
@@ -20,11 +22,17 @@ class DividendsController extends Controller
     public function actionCreate()
     {
         $model = new Dividend();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model->on($model::EVENT_BEFORE_VALIDATE,[$model,'normalizeDates']);
+        // AJAX validation
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+        elseif ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect('index');
         } else {
-            return $this->renderPartial('create', compact('model'));
+            return $this->render('create', compact('model'));
+            //return $this->renderPartial('create', compact('model'));
         }
     }
 
@@ -32,6 +40,7 @@ class DividendsController extends Controller
     {
         $model = $this->findModel($id);
         return $this->renderPartial('view', compact('model'));
+        //return $this->render('view', compact('model'));
 
     }
 

@@ -76,4 +76,16 @@ class Exchange extends \yii\db\ActiveRecord
     public function getCompanies(){
         return $this->hasMany(Company::className(),['companyid' => 'companyid'])->via('quotes');
     }
+
+    // validation in dividends create form
+    // in case JS is off
+
+    /**
+     * @param $companyid
+     * @return bool
+     */
+    public function hasCompany($companyid)
+    {
+        return $this->getCompanies()->where(['companyid' => $companyid])->exists();
+    }
 }

@@ -5,6 +5,7 @@ namespace backend\modules\admin\controllers;
 use Yii;
 use common\models\country\Country;
 use common\models\country\CountrySearch;
+use yii\web\Response;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,10 +21,28 @@ class CountriesController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['post']
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param $countryid
+     * AJAX from dividend create form
+     * TODO transform to REST
+     */
+    public function actionGetExchangesByCountry($countryid)
+    {
+        $model = new Country();
+        $model->countryid = $countryid;
+        $exchanges = $model->exchanges;
+
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $exchanges;
+
+        return $response;
     }
 
     /**

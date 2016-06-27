@@ -22,7 +22,8 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/ajax.js',
-        'js/context_menu.js'
+        'js/context_menu.js',
+        'js/dividend.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

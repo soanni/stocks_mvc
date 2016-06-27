@@ -2,12 +2,17 @@
 
 namespace common\models\dividend;
 
+use app\components\validators\CompanyValidator;
+use app\components\validators\ExchangeValidator;
+use app\components\validators\QuoteValidator;
 use common\helpers\DatabaseHelper;
 use common\models\ActiveRecordTimestamp;
+use common\models\country\Country;
 use common\models\currency\Currency;
 use common\models\exchange\Exchange;
 use common\models\quote\Quote;
 use common\models\company\Company;
+use yii\base\Event;
 use yii;
 
 /**
@@ -28,6 +33,10 @@ use yii;
  */
 class Dividend extends ActiveRecordTimestamp
 {
+    /**
+     * @var integer to select on the create form
+     */
+    public $country;
 
     public static function tableName()
     {
@@ -37,29 +46,21 @@ class Dividend extends ActiveRecordTimestamp
     public function rules()
     {
         return [
-            [['quoteid','companyid','exchid','exdividenddate','recorddate','announcementdate','paymentdate','value','currencyid'],'required'],
+            [['quoteid','companyid','exchid','exdividenddate','recorddate','announcementdate','paymentdate','value','currencyid', 'country'],'required'],
             ['quoteid','in','range' => array_keys(DatabaseHelper::getQuotesFullnameList())],
+            // in case JS is off and select fields are not automatically populated with the dependant values
+            // we need to perform server side validation
+            ['quoteid',QuoteValidator::className()],
             ['companyid','in','range' => array_keys(DatabaseHelper::getCompaniesList())],
+            ['companyid', CompanyValidator::className()],
             ['exchid','in','range' => array_keys(DatabaseHelper::getExchangesList())],
-            //['countryid','in','range' => array_keys(DatabaseHelper::getCountriesList())],
+            ['exchid', ExchangeValidator::className()],
+            ['country','in','range' => array_keys(DatabaseHelper::getCountriesList())],
             ['currencyid', 'in', 'range' => array_keys(DatabaseHelper::getCurrenciesList())],
             ['value','number'],
-            [['exdividenddate','recorddate','announcementdate','paymentdate'],'date','format' => 'php:d/m/Y'],
+            [['exdividenddate','recorddate','announcementdate','paymentdate'],'date','format' => 'php:Y-m-d'],
             [['ActiveFlag','ChangeDate'],'safe']
         ];
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            $this->exdividenddate = Yii::$app->formatter->asDate(date_create_from_format('d/m/Y',$this->exdividenddate),'php:Y-m-d');
-            $this->recorddate = Yii::$app->formatter->asDate(date_create_from_format('d/m/Y',$this->recorddate),'php:Y-m-d');
-            $this->announcementdate = Yii::$app->formatter->asDate(date_create_from_format('d/m/Y',$this->announcementdate),'php:Y-m-d');
-            $this->paymentdate = Yii::$app->formatter->asDate(date_create_from_format('d/m/Y',$this->paymentdate),'php:Y-m-d');
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function getExchange(){
@@ -76,5 +77,22 @@ class Dividend extends ActiveRecordTimestamp
 
     public function getCurrency(){
         return $this->hasOne(Currency::className(),['curid' => 'currencyid']);
+    }
+
+    /**
+     * @param Event $event
+     * Handler for EVENT_BEFORE_VALIDATE event
+     * Handler will normalize dates from Datepicker widget
+     */
+    protected function normalizeDates(Event $event)
+    {
+        /**
+         * @var Dividend $model
+         */
+        $model = $event->sender;
+        $model->exdividenddate = Yii::$app->formatter->asDate(date_create_from_format('d-M-Y',$this->exdividenddate),'php:Y-m-d');
+        $model->recorddate = Yii::$app->formatter->asDate(date_create_from_format('d-M-Y',$this->recorddate),'php:Y-m-d');
+        $model->announcementdate = Yii::$app->formatter->asDate(date_create_from_format('d-M-Y',$this->announcementdate),'php:Y-m-d');
+        $model->paymentdate = Yii::$app->formatter->asDate(date_create_from_format('d-M-Y',$this->paymentdate),'php:Y-m-d');
     }
 }

@@ -5,7 +5,9 @@ namespace backend\modules\admin\controllers;
 use Yii;
 use common\models\exchange\Exchange;
 use common\models\exchange\ExchangeSearch;
+use common\models\company\Company;
 use yii\web\Controller;
+use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -20,10 +22,46 @@ class ExchangesController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['post']
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param $exchid
+     * AJAX from dividend create form
+     * TODO transform to REST
+     */
+    public function actionGetCompaniesByExchange($exchid)
+    {
+        $model = new Exchange();
+        $model->exchid = $exchid;
+        $companies = $model->companies;
+
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $companies;
+
+        return $response;
+    }
+
+    /**
+     * @param $exchid
+     * AJAX from dividend create form
+     * TODO transform to REST
+     */
+    public function actionGetQuotesByExchange($exchid)
+    {
+        $model = new Exchange();
+        $model->exchid = $exchid;
+        $quotes = $model->quotes;
+
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $quotes;
+
+        return $response;
     }
 
     /**

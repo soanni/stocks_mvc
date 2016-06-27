@@ -16,11 +16,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
-        <?= Html::a('Create dividend', ['create'], ['class' => 'btn btn-success actionModal']) ?>
+        <?php
+            // modal create form
+            //echo Html::a('Create dividend', ['create'], ['class' => 'btn btn-success actionModal']);
+
+            // regular create form
+            echo Html::a('Create dividend', ['create'], ['class' => 'btn btn-success']);
+        ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'rowOptions' => function($model, $key, $index, $grid){
+            if(!$model->ActiveFlag){
+                return ['class' => 'danger'];
+            }else
+                return [];
+        },
         //'filterModel' => $searchModel,
         'columns' => [
             [
@@ -93,6 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?php
+        // container for modal form create/view
         \yii\bootstrap\Modal::begin([
             'headerOptions' => ['id' => 'modal-header'],
             'id' => 'modal',

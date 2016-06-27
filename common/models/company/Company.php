@@ -78,5 +78,15 @@ class Company extends ActiveRecordTimestamp
         return $this->hasMany(Quote::className(), ['companyid' => 'companyid']);
     }
 
+    ////////////////////////////// validation
+
+    /**
+     * @param $qid
+     * @return bool
+     */
+    public function hasQuote($qid)
+    {
+        return $this->getQuotes()->where(['qid' => $qid])->exists();
+    }
 
 }
